@@ -343,7 +343,7 @@ def addMetadata(fromServerName, fromServerPort, fromAdminUser, fromAdminPass, se
                                 arcpy.AddMessage("     Step 2: Modifying services information")
 
                                 if len(dataframes) > 1:
-     
+    
                                     restURL = "/arcgis/rest/services/" + folderName + "/" + simpleServiceName + "/MapServer"
                                     responseRest, dataRest = postToServer(fromServerName, str(fromServerPort), restURL, urllib.urlencode({'f': 'json'}))
 
@@ -353,66 +353,64 @@ def addMetadata(fromServerName, fromServerPort, fromAdminUser, fromAdminPass, se
                                         initialMapName = json.loads(dataRest)["mapName"]                                    
                                         for df in dataframes:
                                             if (df.name == initialMapName):
-                                                if mapNameOverwrite.upper() == 'TRUE':                                                    
-                                                    df.name = mapNameParam
-                                                    df.description = descriptionParam
-                                                else:
-                                                    df.name = df.name + " " + mapNameParam
-
-                                                if descriptionOverwrite.upper() == 'TRUE':                                                    
-                                                    df.description = descriptionParam
-                                                else:
-                                                    df.description = df.description + " " + descriptionParam
+                                                if mapNameParam:
+                                                    if mapNameOverwrite.upper() == 'TRUE':
+                                                        df.name = mapNameParam
+                                                        df.description = descriptionParam
+                                                    else:
+                                                        df.name = df.name + " " + mapNameParam
+                                                if descriptionParam:
+                                                    if descriptionOverwrite.upper() == 'TRUE':                                                    
+                                                        df.description = descriptionParam
+                                                    else:
+                                                        df.description = df.description + " " + descriptionParam
                                                     
                                                 break
                                 else:
-                                    df = dataframes[0]
-                                    df.name = mapNameParam
-                                    df.description = descriptionParam
-
-
-
+                                    if mapNameParam:
+                                        if mapNameOverwrite.upper() == 'TRUE':                                        
+                                            df = dataframes[0]
+                                            df.name = mapNameParam
+                                            df.description = descriptionParam
+                                        else:
+                                            df = dataframes[0]
+                                            df.name = df.name + " " + mapNameParam                                    
+                                            df.description = descriptionParam
                                         
-                                if summaryOverwrite.upper() == 'TRUE':
-                                    if summaryParam:
+                                if summaryParam:
+                                    if summaryOverwrite.upper() == 'TRUE':
                                         mapDoc.summary = summaryParam
-                                else:
-                                    if summaryParam:
+                                    else:
                                         mapDoc.summary = mapDoc.summary + " " + summaryParam
 
-                                if serviceDescriptionOverwrite.upper() == 'TRUE':
-                                    if serviceDescriptionParam: 
+                                if serviceDescriptionParam:
+                                    if serviceDescriptionOverwrite.upper() == 'TRUE':                                     
                                         mapDoc.description = serviceDescriptionParam
-                                else:
-                                    if serviceDescriptionParam: 
+                                    else: 
                                         mapDoc.description = mapDoc.description + " " + serviceDescriptionParam                                        
 
-                                if tagsOverwrite.upper() == 'TRUE':
-                                    if tagsParam: 
+                                if tagsParam:
+                                    if tagsOverwrite.upper() == 'TRUE':                                    
                                         mapDoc.tags = tagsParam
-                                else:
-                                    if tagsParam: 
+                                    else:
                                         mapDoc.tags = mapDoc.tags + "," + tagsParam
 
-                                if authorOverwrite.upper() == 'TRUE':
-                                    if authorParam: 
+                                if authorParam:
+                                    if authorOverwrite.upper() == 'TRUE':                                    
                                         mapDoc.author = authorParam
-                                else:
-                                    if authorParam: 
+                                    else:
                                         mapDoc.author = mapDoc.author + " " + authorParam
                                         
-                                if creditsOverwrite.upper() == 'TRUE':
-                                    if creditsParam: 
+                                if creditsParam:
+                                    if creditsOverwrite.upper() == 'TRUE':                                     
                                         mapDoc.credits = creditsParam
-                                else:
-                                    if creditsParam: 
+                                    else: 
                                         mapDoc.credits = mapDoc.credits + " " + creditsParam
 
-                                if titleOverwrite.upper() == 'TRUE':
-                                    if titleParam: 
+                                if titleParam:
+                                    if titleOverwrite.upper() == 'TRUE':                                    
                                         mapDoc.title = titleParam   
-                                else:                                    
-                                    if titleParam: 
+                                    else:                                     
                                         mapDoc.title = mapDoc.title + " " + titleParam                                    
                                     
                                 mapDoc.save() 
